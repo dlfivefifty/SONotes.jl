@@ -41,22 +41,6 @@ function fixunderbars(path)
     write(path, replace(read(path, String), "\\ensuremath{\\theta}\\ensuremath{\\tilde}" => "\\tilde{\\theta}"))
 end
 
-function compilenotes(filename)
-    weave("src/notes/$filename.jmd"; out_path="notes/", doctype="md2tex", template="src/notes/template.tpl")
-    path = "notes/$filename.tex"
-    replacetheorem(path, "theorem", "Theorem")
-    replacetheorem(path, "lemma", "Lemma")
-    replacetheorem(path, "proposition", "Proposition")
-    replacetheorem(path, "corollary", "Corollary")
-    replacedefinition(path, "example", "Example")
-    replacedefinition(path, "definition", "Definition")
-    # work around double newline before equation
-    fixwhitespace(path)
-    fixunderbars(path)
-    # work around meeq
-    write(path, replace(read(path, String), r"\\\[\n\\meeq\{(.*?)\}\n\\\]"s => s"\\meeq{\1}"))
-end
-
 function compilenotes(name)
     weave("src/notes/$name.jmd"; out_path="notes/", doctype="md2tex", template="src/notes/notes.tpl")
     path = "notes/$name.tex"
